@@ -22,6 +22,8 @@ int main()
     int option = 0;
     char pathCsv[SIZE_STRING];
     char pathBin[SIZE_STRING];
+    char pathNewSavedCsv[SIZE_STRING];
+    char pathNewSavedBin[SIZE_STRING];
     int flagTextController = 0;
     int flagBinController = 0;
     int flagSaveCsv = 0;
@@ -31,32 +33,28 @@ int main()
 
     LinkedList* listaPasajeros = ll_newLinkedList();
 
-    /*PODRIA UTILIZAR UN FLAG, QUE CUANDO TENGAS QUE SALIR TE OBLIGUE A GUARDAR ANTES EN AMBOS ARCHIVOS
-     * */
-
-    returnLastIdTxt = controller_createLastIdTxt("lastId.csv");
-    //returnLastIdTxt = controller_createLastIdTxt2("lastId2.csv","data.csv");
+    returnLastIdTxt = controller_createLastIdTxt("lastId.csv","data.csv");
 
     do{
 
     	if(!returnLastIdTxt &&
-    	   utn_pedirEntero(&option, "\n\tMENU"
-    								"\n1-CARGAR PASAJEROS DESDE EL .CSV"
-    								"\n2-CARGAR PASAJEROS DESDE EL .BIN"
-    								"\n3-ALTA DE PASAJERO"
-    								"\n4-MODIFICAR DATOS DE PASAJERO"
-    								"\n5-BAJA DE PASAJERO"
-    								"\n6-LISTAR PASAJEROS"
-    								"\n7-ORDENAR PASAJEROS"
-    								"\n8-GUARDAR DATOS DEL PASAJERO EN EL ARCHIVO .CSV"
-    								"\n9-GUARDAR DATOS DEL PASAJERO EN EL ARCHIVO .BIN"
-    								"\n10-SALIR"
-    								"\nOpcion: ", "\nERROR\n", 1, 10, 5)==0)
+    	   utn_pedirEntero(&option,
+    			   	   	   "\n\tMENU"
+    					   "\n1-CARGAR PASAJEROS DESDE EL .CSV"
+    					   "\n2-CARGAR PASAJEROS DESDE EL .BIN"
+    					   "\n3-ALTA DE PASAJERO"
+    			           "\n4-MODIFICAR DATOS DE PASAJERO"
+    					   "\n5-BAJA DE PASAJERO"
+    					   "\n6-LISTAR PASAJEROS"
+    					   "\n7-ORDENAR PASAJEROS"
+    					   "\n8-GUARDAR DATOS DEL PASAJERO EN EL ARCHIVO .CSV"
+    					   "\n9-GUARDAR DATOS DEL PASAJERO EN EL ARCHIVO .BIN"
+    					   "\n10-SALIR"
+    					   "\nOpcion: ", "\nERROR\n", 1, 10, 5)==0)
     	{
 			switch(option)
 			{
 				case 1:
-					//PREGUNTAR POR ARCHIVO, VERIFICAR
 					if( (flagTextController == 0 && flagBinController == 0) )
 					{
 						if( !controller_accessFileByName(pathCsv) &&
@@ -126,7 +124,6 @@ int main()
 						{
 							printf("\nNO EXISTE EL ID INDICADO");
 						}
-
 					}
 					else
 					{
@@ -136,7 +133,7 @@ int main()
 				case 5:
 					if(ll_isEmpty(listaPasajeros) == 0)
 					{
-						if(flagTextController == 1)
+						if(flagTextController == 1 || flagBinController == 1)
 						{
 							controller_removePassenger(listaPasajeros);
 						}
@@ -148,9 +145,12 @@ int main()
 
 					break;
 				case 6:
-					if(!controller_ListPassenger(listaPasajeros))
+					if(ll_isEmpty(listaPasajeros) == 0)
 					{
-						printf("\nMOSTRADOS\n");
+						if(controller_listPassenger(listaPasajeros) == 0)
+						{
+							printf("\nMOSTRADOS\n");
+						}
 					}
 					else
 					{
@@ -171,7 +171,10 @@ int main()
 					break;
 				case 8:
 					if(flagTextController == 1 &&
-					   !controller_saveAsText(pathCsv,listaPasajeros))
+					   !utn_pedirCadena(pathNewSavedCsv, SIZE_STRING,
+									   "\nINGRESE EL NOMBRE DEL CSV A SER GUARDADO: ",
+									   "\nERROR\n", 3, SIZE_STRING, 5)&&
+					   !controller_saveAsText(pathNewSavedCsv,listaPasajeros))
 					{
 						printf("\nPASAJEROS GUARDADOS\n");
 						flagSaveCsv = 1;
@@ -183,7 +186,10 @@ int main()
 					break;
 				case 9:
 					if((flagTextController == 1 || flagBinController == 1 )&&
-					   !controller_saveAsBinary(pathBin,listaPasajeros))
+						!utn_pedirCadena(pathNewSavedBin, SIZE_STRING,
+										"\nINGRESE EL NOMBRE DEL BIN A SER GUARDADO: ",
+										"\nERROR\n", 3, SIZE_STRING, 5)&&
+					   !controller_saveAsBinary(pathNewSavedBin,listaPasajeros))
 					{
 						printf("\nPASAJEROS GUARDADOS\n");
 						flagSaveBin = 1;
@@ -194,16 +200,19 @@ int main()
 					}
 					break;
 				case 10:
-					//CLAVARLE LOS WARNING DE SICRONIZACION DEL GUARDADO DE ARCHIVOS CSV Y BIN
 					if(flagSaveBin == 1 && flagSaveCsv == 1)
 					{
-						break;
+						printf("\nFINALIZANDO...\n");
 					}
 					else
 					{
-
-						printf("\n****ALERTA****\nGUARDE EL ARCHIVO BIN Y EL CSV\n");
+						printf("\n*****************************************************"
+							   "\n****-------------------ALERTA--------------------****"
+							   "\n****GUARDE EL ARCHIVO BIN Y EL CSV ANTES DE SALIR****"
+							   "\n*****************************************************\n");
+						option = 0;
 					}
+					break;
 			}
     	}
     }while(option != 10);

@@ -13,6 +13,7 @@
 
 int esNumerica(char* pCadena, int longitud);
 int esNombreApellido(char* pCadena, int longitud);
+int esPrecio(char* pCadena, int longitud);
 int esTipoPasajero(char* pCadena, int longitud);
 int esEstadoVuelo(char* pCadena, int longitud);
 

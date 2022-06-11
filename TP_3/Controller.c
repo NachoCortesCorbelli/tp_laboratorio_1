@@ -20,7 +20,6 @@ int controller_loadFromText(char* path , LinkedList* pArrayListPassenger)
 	FILE* pFile;
 	if(pArrayListPassenger != NULL && path != NULL)
 	{
-
 		pFile = fopen(path,"r");
 		if(pFile != NULL)
 		{
@@ -64,26 +63,20 @@ int controller_loadFromLastId(char* path,int* pLastId)
 	}
 	return retorno;
 }
-/**
- * \brief crea el archivo lastId.txt
- * \param path la ruta del archivo
- * \return retorna 0 si pudo parsear -1 error
- */
-int controller_createLastIdTxt(char* path)
+
+int controller_scanLastIdFromCsv(char* pathCsv, char* pIdString)
 {
-	FILE* pFileId;
+	FILE* pFileCsv;
 	int retorno = -1;
 
-	if(path != NULL)
+	pFileCsv = fopen(pathCsv,"r");
+	if(pFileCsv != NULL)
 	{
-		//LEVANTAR EL DATA CSV Y TOMAR EL ULTIMO ID
-		pFileId = fopen(path,"w");
-		if(pFileId != NULL)
+		if(!parser_lastIdFromCsv(pFileCsv, pIdString))
 		{
-			fprintf(pFileId,"1000");
 			retorno = 0;
 		}
-		fclose(pFileId);
+		fclose(pFileCsv);
 	}
 	return retorno;
 }
@@ -92,32 +85,22 @@ int controller_createLastIdTxt(char* path)
  * \param path la ruta del archivo
  * \return retorna 0 si pudo parsear -1 error
  */
-int controller_createLastIdTxt2(char* pathNew,char* pathCsv)
+int controller_createLastIdTxt(char* pathNew, char* pathCsv)
 {
-	FILE* pFileCsv;
 	FILE* pFileId;
 	int retorno = -1;
 	char idString[SIZE_STRING];
 
-	pFileCsv = fopen(pathCsv,"r");
-	if(pFileCsv != NULL)
+	if(!controller_scanLastIdFromCsv(pathCsv, idString))
 	{
-		printf("\n1\n");
-		if(parser_lastIdFromCsv(pFileCsv, idString)==0)
+		pFileId = fopen(pathNew,"w");
+		if(pFileId != NULL)
 		{
-			printf("\n2\n");
-			pFileId = fopen(pathNew,"w");
-			if(pFileId != NULL)
-			{
-				printf("\n3\n");
-				fprintf(pFileId,"%s",idString);
-				retorno = 0;
-			}
+			fprintf(pFileId,"%s",idString);
+			retorno = 0;
 			fclose(pFileId);
 		}
-		printf("\n4\n");
 	}
-	fclose(pFileCsv);
 	return retorno;
 }
 /**
@@ -267,23 +250,25 @@ int controller_removePassenger(LinkedList* pArrayListPassenger)
  * \return int retorna 0 si pudo parsear -1 error
  *
  */
-int controller_ListPassenger(LinkedList* pArrayListPassenger)
+int controller_listPassenger(LinkedList* pArrayListPassenger)
 {
 	int retorno = -1;
+	int i;
 	int length;
 	if(pArrayListPassenger !=NULL)
 	{
 		length = ll_len(pArrayListPassenger);
 		if(length > 0)
 		{
-			for(int i = 0; i < length; i++)
+			for(i = 0; i < length; i++)
 			{
-				if(!passenger_print(pArrayListPassenger, i) )
+				if(!passenger_print(pArrayListPassenger, i))
 				{
+					retorno = 0;
 					printf("\n");
 				}
 			}
-			retorno = 0;
+
 		}
 	}
     return retorno;
@@ -388,6 +373,15 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 	int length;
 	FILE* pFile;
 	Passenger* auxPassenger = NULL;
+	int id;
+	char nombre[SIZE_STRING];
+	char apellido[SIZE_STRING];
+	float precio;
+	char codigoVuelo[SIZE_STRING];
+	int tipoPasajero;
+	char tipoPasajeroStr[SIZE_STRING];
+	int estadoVuelo;
+	char estadoVueloStr[SIZE_STRING];
 
 	if(pArrayListPassenger != NULL && path != NULL && ll_len(pArrayListPassenger) > 0)
 	{
@@ -399,16 +393,26 @@ int controller_saveAsText(char* path , LinkedList* pArrayListPassenger)
 			for(int i = 0; i < length; i++)
 			{
 				auxPassenger = (Passenger*)ll_get(pArrayListPassenger, i);
-				if(auxPassenger != NULL)
+				if(auxPassenger != NULL &&
+				   !passenger_getId(auxPassenger, &id)&&
+				   !passenger_getNombre(auxPassenger,nombre) &&
+				   !passenger_getApellido(auxPassenger, apellido)&&
+				   !passenger_getPrecio(auxPassenger, &precio) &&
+				   !passenger_getCodigoVuelo(auxPassenger, codigoVuelo)&&
+				   !passenger_getEstadoVuelo(auxPassenger, &estadoVuelo)&&
+				   !passenger_getEstadoVueloTxt(auxPassenger, estadoVuelo, estadoVueloStr)&&
+				   !passenger_getTipoPasajero(auxPassenger, &tipoPasajero) &&
+				   !passenger_getTipoPasajeroTxt(auxPassenger, tipoPasajero, tipoPasajeroStr))
 				{
-					fprintf(pFile,"%d,%s,%s,%.2f,%s,%d,%d\n",
-						    auxPassenger->id,
-						    auxPassenger->nombre,
-						    auxPassenger->apellido,
-						    auxPassenger->precio,
-						    auxPassenger->codigoVuelo,
-						    auxPassenger->tipoPasajero,
-  						    auxPassenger->estadoVuelo);
+					//printf("\nPRECIO: %f\n",precio);
+					fprintf(pFile,"%d,%s,%s,%.2f,%s,%s,%s\n",
+							id,
+							nombre,
+						    apellido,
+						    precio,
+						    codigoVuelo,
+  						    tipoPasajeroStr,
+						    estadoVueloStr);
 				}
 			}
 			retorno = 0;

@@ -6,10 +6,25 @@
  */
 #include "Passenger.h"
 
+/**
+ * \brief
+ * \return
+ */
 Passenger* passenger_new(void)
 {
 	return (Passenger*) malloc (sizeof(Passenger));
 }
+/**
+ * \brief
+ * \param id
+ * \param nombre
+ * \param apellido
+ * \param precio
+ * \param codigoVuelo
+ * \param tipoPasajero
+ * \param estadoVuelo
+ * \return
+ */
 Passenger* passenger_newParametros(int id,char* nombre,char* apellido,float precio,
 								   char* codigoVuelo,int tipoPasajero,
 								   int estadoVuelo)
@@ -28,7 +43,18 @@ Passenger* passenger_newParametros(int id,char* nombre,char* apellido,float prec
 	}
 	return pPassenger;
 }
-Passenger* passenger_newParametrosStr(char* idStr,char* nombreStr,
+/**
+ * \brief
+ * \param idStr
+ * \param nombreStr
+ * \param apellidoStr
+ * \param precioStr
+ * \param codigoVueloStr
+ * \param tipoPasajeroStr
+ * \param estadoVueloStr
+ * \return
+ */
+Passenger* passenger_newParametrosStr( char* idStr,char* nombreStr,
 									   char* apellidoStr,char* precioStr,
 									   char* codigoVueloStr,char* tipoPasajeroStr,
 									   char* estadoVueloStr)
@@ -47,7 +73,10 @@ Passenger* passenger_newParametrosStr(char* idStr,char* nombreStr,
 	}
 	return pPassenger;
 }
-
+/**
+ * \brief
+ * \param this
+ */
 void passenger_delete(Passenger* this)
 {
 	if(this != NULL)
@@ -55,17 +84,18 @@ void passenger_delete(Passenger* this)
 		free(this);
 	}
 }
-
+/**
+ * \brief
+ * \param this
+ * \param nombre
+ * \return
+ */
 int passenger_setNombre(Passenger* this,char* nombre)
 {
 	int retorno = -1;
 	if(this != NULL && nombre != NULL)
 	{
-		if(nombre[strlen(nombre)-1] == '\n')
-		{
-			nombre[strlen(nombre)-1] = '\0';
-		}
-		if(esNombreApellido(nombre, 50)==1)
+		if(esNombreApellido(nombre, sizeof(nombre))==1)
 		{
 			retorno = 0;
 			strncpy(this->nombre,nombre,50);
@@ -73,6 +103,12 @@ int passenger_setNombre(Passenger* this,char* nombre)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param nombre
+ * \return
+ */
 int passenger_getNombre(Passenger* this,char* nombre)
 {
 	int retorno = -1;
@@ -88,23 +124,17 @@ int passenger_setApellido(Passenger* this,char* apellido)
 	int retorno = -1;
 	if(this != NULL && apellido != NULL)
 	{
-		if(apellido[strlen(apellido)-1] == '\n')
-		{
-			apellido[strlen(apellido)-1] = '\0';
-		}
-		/*
-		if(esNombreApellido(apellido, 50)==1)
-		{
-			retorno = 0;
-			strncpy(this->apellido,apellido,50);
-		}
-		*/
 		retorno = 0;
 		strncpy(this->apellido,apellido,50);
 	}
-	//printf("\nRETORNO: %d",retorno);
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param apellido
+ * \return
+ */
 int passenger_getApellido(Passenger* this,char* apellido)
 {
 	int retorno = -1;
@@ -115,6 +145,12 @@ int passenger_getApellido(Passenger* this,char* apellido)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param id
+ * \return
+ */
 int passenger_getId(Passenger* this,int* id)
 {
 	int retorno = -1;
@@ -125,13 +161,19 @@ int passenger_getId(Passenger* this,int* id)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param id
+ * \return
+ */
 int passenger_setIdTxt(Passenger* this,char* id)
 {
 	int retorno = -1;
 	int auxId;
 	if(this != NULL && id != NULL)
 	{
-		if(esNumerica(id, SIZE_STRING)==1)//valido el id
+		if(esNumerica(id, SIZE_STRING)==TRUE)
 		{
 			auxId = atoi(id);
 			if(auxId > 0)
@@ -143,7 +185,12 @@ int passenger_setIdTxt(Passenger* this,char* id)
 	}
 	return retorno;
 }
-
+/**
+ * \brief
+ * \param this
+ * \param id
+ * \return
+ */
 int passenger_setId(Passenger* this,int id)
 {
 	int retorno = -1;
@@ -154,13 +201,19 @@ int passenger_setId(Passenger* this,int id)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param precioStr
+ * \return
+ */
 int passenger_setPrecioTxt(Passenger* this,char* precioStr)
 {
 	int retorno = -1;
 	float auxPrecio;
 	if(this != NULL && precioStr != NULL)
 	{
-		if(esNumerica(precioStr, SIZE_STRING)==1)
+		if(esPrecio(precioStr, sizeof(precioStr)) == TRUE )
 		{
 			auxPrecio = atof(precioStr);
 			if(auxPrecio > 0)
@@ -172,16 +225,28 @@ int passenger_setPrecioTxt(Passenger* this,char* precioStr)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param precio
+ * \return
+ */
 int passenger_setPrecio(Passenger* this,float precio)
 {
 	int retorno = -1;
-	if(this != NULL)
+	if(this != NULL && precio > 0)
 	{
 		retorno = 0;
 		this->precio = precio;
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param precio
+ * \return
+ */
 int passenger_getPrecio(Passenger* this,float* precio)
 {
 	int retorno = -1;
@@ -192,22 +257,28 @@ int passenger_getPrecio(Passenger* this,float* precio)
 	}
 	return retorno;
 }
-
+/**
+ * \brief
+ * \param this
+ * \param codigoVueloStr
+ * \return
+ */
 int passenger_setCodigoVuelo(Passenger* this, char* codigoVueloStr)
 {
 	int retorno = -1;
 	if(this != NULL && codigoVueloStr != NULL)
 	{
-		if(codigoVueloStr[strlen(codigoVueloStr)-1] == '\n')
-		{
-			codigoVueloStr[strlen(codigoVueloStr)-1] = '\0';
-		}
-
 		retorno = 0;
 		strncpy(this->codigoVuelo,codigoVueloStr,8);
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param codigoVuelo
+ * \return
+ */
 int passenger_getCodigoVuelo(Passenger* this, char* codigoVuelo)
 {
 	int retorno = -1;
@@ -219,17 +290,18 @@ int passenger_getCodigoVuelo(Passenger* this, char* codigoVuelo)
 	return retorno;
 }
 //CREAR VALIDATION - USO DEFINES PARA LOS TIPOS DE VUELOS
+/**
+ * \brief
+ * \param this
+ * \param tipoPasajeroStr
+ * \return
+ */
 int passenger_setTipoPasajeroTxt(Passenger* this, char* tipoPasajeroStr)
 {
 	int retorno = -1;
 	int retornoValidacion;
 	if(this != NULL && tipoPasajeroStr != NULL)
 	{
-		//ENCUENTRA EL /n Y LO REEMPLAZA POR /0
-		if(tipoPasajeroStr[strlen(tipoPasajeroStr)-1] == '\n')
-		{
-			tipoPasajeroStr[strlen(tipoPasajeroStr)-1] = '\0';
-		}
 		retornoValidacion = esTipoPasajero(tipoPasajeroStr,sizeof(tipoPasajeroStr));
 		if(retornoValidacion == 1 || retornoValidacion == 2 ||
 		   retornoValidacion == 3 )
@@ -240,35 +312,41 @@ int passenger_setTipoPasajeroTxt(Passenger* this, char* tipoPasajeroStr)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param tipoPasajero
+ * \param tipoPasajeroStr
+ * \return
+ */
 int passenger_getTipoPasajeroTxt(Passenger* this, int tipoPasajero, char* tipoPasajeroStr)
 {
 	int retorno = 0;
 	if(this != NULL && tipoPasajeroStr != NULL)
 	{
-		if(tipoPasajero == 1)
+		switch(tipoPasajero)
 		{
-			strncpy(tipoPasajeroStr,"EconomyClass",50);
-		}
-		else if(tipoPasajero == 2)
-		{
-			strncpy(tipoPasajeroStr,"ExecutiveClass",50);
-		}
-		else if(tipoPasajero == 3)
-		{
-			strncpy(tipoPasajeroStr,"FirstClass",50);
-		}
-		else
-		{
-			retorno = -1;
-		}
-		if(retorno == 0 &&
-		    tipoPasajeroStr[strlen(tipoPasajeroStr)-1] == '\n')
-		{
-			tipoPasajeroStr[strlen(tipoPasajeroStr)-1] = '\0';
+			case 1:
+				strncpy(tipoPasajeroStr,"EconomyClass",50);
+				break;
+			case 2:
+				strncpy(tipoPasajeroStr,"ExecutiveClass",50);
+				break;
+			case 3:
+				strncpy(tipoPasajeroStr,"FirstClass",50);
+				break;
+			default:
+				retorno = -1;
 		}
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param tipoPasajero
+ * \return
+ */
 int passenger_setTipoPasajero(Passenger* this,int tipoPasajero)
 {
 	int retorno = -1;
@@ -279,6 +357,12 @@ int passenger_setTipoPasajero(Passenger* this,int tipoPasajero)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param tipoPasajero
+ * \return
+ */
 int passenger_getTipoPasajero(Passenger* this, int* tipoPasajero)
 {
 	int retorno = -1;
@@ -289,17 +373,18 @@ int passenger_getTipoPasajero(Passenger* this, int* tipoPasajero)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param estadoVueloStr
+ * \return
+ */
 int passenger_setEstadoVueloTxt(Passenger* this, char* estadoVueloStr)
 {
 	int retorno = -1;
 	int retornoValidacion;
 	if(this != NULL && estadoVueloStr != NULL)
 	{
-		//ENCUENTRA EL /n Y LO REEMPLAZA POR /0
-		if(estadoVueloStr[strlen(estadoVueloStr)-1] == '\n')
-		{
-			estadoVueloStr[strlen(estadoVueloStr)-1] = '\0';
-		}
 		retornoValidacion = esEstadoVuelo(estadoVueloStr,sizeof(estadoVueloStr));
 		if(retornoValidacion >= 1 && retornoValidacion <= 4)
 		{
@@ -309,16 +394,31 @@ int passenger_setEstadoVueloTxt(Passenger* this, char* estadoVueloStr)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param estadoVuelo
+ * \return
+ */
 int passenger_setEstadoVuelo(Passenger* this,int estadoVuelo)
 {
 	int retorno = -1;
 	if(this != NULL)
 	{
-		retorno = 0;
-		this->estadoVuelo = estadoVuelo;
+		if(estadoVuelo >= 1 && estadoVuelo <= 4)
+		{
+			retorno = 0;
+			this->estadoVuelo = estadoVuelo;
+		}
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param estadoVuelo
+ * \return
+ */
 int passenger_getEstadoVuelo(Passenger* this, int* estadoVuelo)
 {
 	int retorno = -1;
@@ -329,39 +429,44 @@ int passenger_getEstadoVuelo(Passenger* this, int* estadoVuelo)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param this
+ * \param estadoVuelo
+ * \param estadoVueloStr
+ * \return
+ */
 int passenger_getEstadoVueloTxt(Passenger* this,int estadoVuelo, char* estadoVueloStr)
 {
 	int retorno = 0;
 	if(this != NULL && estadoVueloStr != NULL)
 	{
-		if(estadoVuelo == 1)
+		switch(estadoVuelo)
 		{
-			strncpy(estadoVueloStr,"En Vuelo",50);
-		}
-		else if(estadoVuelo == 2)
-		{
-			strncpy(estadoVueloStr,"En Horario",50);
-		}
-		else if(estadoVuelo == 3)
-		{
-			strncpy(estadoVueloStr,"Aterrizado",50);
-		}
-		else if(estadoVuelo == 4)
-		{
-			strncpy(estadoVueloStr,"Demorado",50);
-		}
-		else
-		{
-			retorno = -1;
-		}
-		if(retorno == 0 &&
-		   estadoVueloStr[strlen(estadoVueloStr)-1] == '\n')
-		{
-			estadoVueloStr[strlen(estadoVueloStr)-1] = '\0';
+			case 1:
+				strncpy(estadoVueloStr,"En Vuelo",50);
+				break;
+			case 2:
+				strncpy(estadoVueloStr,"En Horario",50);
+				break;
+			case 3:
+				strncpy(estadoVueloStr,"Aterrizado",50);
+				break;
+			case 4:
+				strncpy(estadoVueloStr,"Demorado",50);
+				break;
+			default:
+				retorno = -1;
 		}
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param pArrayListPassenger
+ * \param pIdPassenger
+ * \return
+ */
 int passenger_addToList(LinkedList* pArrayListPassenger, int* pIdPassenger)
 {
 	int retorno = -1;
@@ -410,6 +515,11 @@ int passenger_addToList(LinkedList* pArrayListPassenger, int* pIdPassenger)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param pPassenger
+ * \return
+ */
 int passenger_modifyPassenger(Passenger* pPassenger)
 {
 	int retorno = -1;
@@ -507,6 +617,12 @@ int passenger_modifyPassenger(Passenger* pPassenger)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param pArrayListPassenger
+ * \param idToFind
+ * \return
+ */
 Passenger* passenger_getById(LinkedList* pArrayListPassenger, int idToFind)
 {
 	Passenger* pPassenger;
@@ -528,6 +644,12 @@ Passenger* passenger_getById(LinkedList* pArrayListPassenger, int idToFind)
 	}
 	return pPassenger;
 }
+/**
+ * \brief
+ * \param pArrayListPassenger
+ * \param idToFind
+ * \return
+ */
 int passenger_getIndexById(LinkedList* pArrayListPassenger, int idToFind)
 {
 	Passenger* pAuxPassenger;
@@ -594,6 +716,12 @@ int passenger_print(LinkedList* pArrayListPassenger, int index)
 	}
 	return retorno;
 }
+/**
+ * \brief
+ * \param pArrayListPassenger
+ * \param index
+ * \return
+ */
 int passenger_deleteFromList(LinkedList* pArrayListPassenger, int index)
 {
 	Passenger* pAuxPassenger;
@@ -827,7 +955,6 @@ int passenger_sortByFlyStatus(void* pElement1, void* pElement2)
 	{
 		retorno = 0;
 	}
-
 	return retorno;
 }
 

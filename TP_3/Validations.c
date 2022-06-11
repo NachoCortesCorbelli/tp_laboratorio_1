@@ -15,16 +15,14 @@
  */
 int esNumerica(char* pCadena, int longitud)
 {
-	int retorno;
-
-	retorno = -1;
+	int retorno = -1;
 
 	if(pCadena != NULL &&
 	   longitud > 0)
 	{
 		for(int i = 0;i < longitud; i++)
 		{
-			if( pCadena[0] == '\0' ||
+			if( //pCadena[0] == '\0' ||
 				pCadena[i] != '\0')
 			{
 				if( (pCadena[i] < '0' || pCadena[i] > '9') &&
@@ -39,10 +37,8 @@ int esNumerica(char* pCadena, int longitud)
 				retorno = 1;
 				break;
 			}
-
 		}
 	}
-
 	return retorno;
 }
 /**
@@ -147,7 +143,38 @@ int esEstadoVuelo(char* pCadena, int longitud)
 
 	return retorno;
 }
-
+int esPrecio (char *pCadena, int longitud)
+{
+	int retorno = 1;
+	int flagComa = 0;
+	if (pCadena != NULL && longitud > 0)
+	{
+		for (int i = 0; i < longitud; i++)
+		{
+		  if(//pCadena[0] == '\0' ||
+		     pCadena[i] != '\0')
+		  {
+			    if((pCadena[i] < '0' || pCadena[i] > '9') &&
+				  ((pCadena[i] != '.' && flagComa == 0) ||
+			      (pCadena[i] == '.' && flagComa == 1)))
+				{
+			    	retorno = 0;
+				  	break;
+				}
+				else if (pCadena[i] == '.' && flagComa == 0)
+				{
+					flagComa = 1;
+					continue;
+				}
+		  }
+		  else
+		  {
+			  break;
+		  }
+		}
+	}
+	return retorno;
+}
 
 
 

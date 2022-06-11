@@ -29,7 +29,7 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 			{
 				if(flag == 1)
 				{
-					pPassenger = passenger_newParametrosStr(auxId, auxNombre,
+					pPassenger = passenger_newParametrosStr( auxId, auxNombre,
 															 auxApellido, auxPrecio,
 															 auxCodigoVuelo,auxTipoPasajero,
 															 auxEstadoVuelo);
@@ -57,7 +57,6 @@ int parser_PassengerFromText(FILE* pFile , LinkedList* pArrayListPassenger)
 			}
 		}while(!feof(pFile));
 	}
-
     return retorno;
 }
 /** \brief Parsea el ultimo id de los empleados desde el archivo lastId.csv.
@@ -126,37 +125,38 @@ int parser_PassengerFromBinary(FILE* pFile , LinkedList* pArrayListPassenger)
 int parser_lastIdFromCsv(FILE* pFile,char* pLastId)
 {
 	char auxId[SIZE_STRING];
+	char auxNombre[SIZE_STRING];
+	char auxApellido[SIZE_STRING];
+	char auxPrecio[SIZE_STRING];
+	char auxCodigoVuelo[SIZE_STRING];
+	char auxTipoPasajero[SIZE_STRING];
+	char auxEstadoVuelo[SIZE_STRING];
 	int retorno = -1;
 	int flag = 0;
 	if(pFile != NULL)
 	{
-
 		do
 		{
-			if(fscanf(pFile,"%[^,]\n", auxId)==1)//NECESITO USAR OTRA FUNCION. CREO
+			if(fscanf(pFile,"%[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n",
+					  auxId,auxNombre,auxApellido,auxPrecio,auxCodigoVuelo,
+					  auxTipoPasajero,auxEstadoVuelo)==7)
 			{
 				if(flag == 1)
 				{
-					printf("\nparser 1\n");
 					retorno = 0;
 				}
-				else if(flag == 0)
+				if(flag == 0)
 				{
 					flag = 1;
 					continue;
 				}
 			}
-			else
-			{
-				retorno = -2;
-			}
 		}while(!feof(pFile));
 		if(retorno == 0)
 		{
-			pLastId = auxId;
+			strncpy(pLastId,auxId,SIZE_STRING);
+//			printf("\nID: %s\n",pLastId);
 		}
 	}
-
     return retorno;
-
 }

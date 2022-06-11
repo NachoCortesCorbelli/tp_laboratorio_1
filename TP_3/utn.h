@@ -16,6 +16,9 @@
 #include <float.h>
 //#define SIZE_STRING 4096 MEDIO EXAGERADO CREO
 #define SIZE_STRING 1024
+#define TRUE 1
+#define FALSE 0
+
 
 int utn_pedirEntero(int* pResultado,char mensaje[],char mensajeError[],
 					int minimo, int maximo, int reintentos);
