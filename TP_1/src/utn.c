@@ -272,6 +272,7 @@ int utn_pedirFlotante(float* pFloat,char mensaje[],char mensajeError[], float mi
 			}
 			else
 			{
+				printf("\n%.2f",bufferFloat);
 				printf("%s",mensajeError);
 				reintentos--;
 			}

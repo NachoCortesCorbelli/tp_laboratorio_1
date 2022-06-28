@@ -8,12 +8,9 @@
 #ifndef MENUAGENCIA_H_
 #define MENUAGENCIA_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-
+int menu_pedirPreciosVuelos(float* pAerolineas, float* pLatam);
+int menu_pedirKilometros(float* pKilometros);
+int menu_cargaForzadaDatos(float aerolineas, float latam, float kilometros);
 int menu();
-//↓van a ir los informes con los datos que se reciben SI O SI 1 2 Y 3
-//TIENEN QUES ESTAR INGRESADOS!
-void subMenu(float,float,float);
 
 #endif /* MENUAGENCIA_H_ */
