@@ -52,7 +52,7 @@ int menu_pedirKilometros(float* pKilometros)
 	{
 		if(!utn_pedirFlotante(&auxKilometros,
 							  "\nINGRESE LOS KILOMETROS: ",
-							  "\nERROR\nINGRESE UN VALOR VALIDO\n", 2.7, 15200, 15))
+							  "\nERROR\nINGRESE UN VALOR VALIDO\n", 2.7, 50000, 15))
 		{
 			*pKilometros = auxKilometros;
 			retorno = 0;
