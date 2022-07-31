@@ -43,9 +43,10 @@ int isArrayPassengerEmpty(ePassenger* list, int len)
 	{
 		for(int i = 0; i<len; i++)
 		{
-			if(list[i].isEmpty == TRUE)
+			if(list[i].isEmpty == FALSE)
 			{
 				result = 0;
+				break;
 			}
 		}
 	}
@@ -233,20 +234,17 @@ int printPassenger(ePassenger* list, int length)
 	int retorno = -1;
 	if(list != NULL && length > 0)
 	{
-		if(isArrayPassengerEmpty(list, length) == FALSE)
+		printf("\n _____________________________________________________________________");
+		printf("\n|ID  |CODIGO    |NOMBRE    |APELLIDO  |PRECIO    |ESTADO    |TIPO     |");
+		printf("\n|---------------------------------------------------------------------|");
+		for(int i= 0;i< length;i++)
 		{
-			printf("\n _____________________________________________________________________");
-			printf("\n|ID  |CODIGO    |NOMBRE    |APELLIDO  |PRECIO    |ESTADO    |TIPO     |");
-			printf("\n|---------------------------------------------------------------------|");
-			for(int i= 0;i< length;i++)
+			if(list[i].isEmpty == FALSE)
 			{
-				if(list[i].isEmpty == FALSE)
-				{
-					printOnePassenger(list[i]);
-				}
+				printOnePassenger(list[i]);
 			}
-			retorno = 0;
 		}
+		retorno = 0;
 	}
 	return retorno;
 }
@@ -267,7 +265,7 @@ int registerPassenger(ePassenger *list, int len, int *pId)
 		index = findEmptyPassenger(list, len);
 		if(index != -1)
 		{
-			if(!utn_pedirCadena(auxPassenger.flycode, 10, "\nINGRESE CODIGO DE VUELO[9 DIGITOS ALFANUM]: \n",
+			if(!utn_pedirCadena(auxPassenger.flycode, 10, "\nINGRESE CODIGO DE VUELO[9 DIGITOS]: \n",
 								"\nERROR\nREINGRESE NUEVAMENTE", 9, 9, 5) &&
 			   !utn_pedirNombreApellido(auxPassenger.name, 51, "\nINGRESE EL NOMBRE DEL PASAGERO: \n",
 									    "\nERROR\nREINGRESE NUEVAMENTE", 2, 51, 5) &&
