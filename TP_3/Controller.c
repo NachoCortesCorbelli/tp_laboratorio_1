@@ -462,7 +462,7 @@ int controller_accessFileByName(char* path)
 	int retorno = -1;
 	char auxFileName[SIZE_STRING];
 	FILE* pFile;
-	//PODRIA HACER UN UTN_PEDIR ARCHIVO QUE VALIDE EL FORMATO (.TXT, .CSV, .BIN)
+
 	if(!utn_pedirCadena(auxFileName, SIZE_STRING,
 						"\nINGRESE EL NOMBRE DEL ARCHIVO: ",
 						"\nERROR\nREINGRESE NUEVAMENTE\n",
